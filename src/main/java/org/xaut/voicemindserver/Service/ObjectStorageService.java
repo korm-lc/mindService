@@ -43,14 +43,18 @@ public class ObjectStorageService {
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(file.getSize());
 
-        PutObjectRequest request = new PutObjectRequest(
-                cosProperties.getBucketName(),
-                key,
-                file.getInputStream(),
-                metadata
-        );
-
-        cosClient.putObject(request);
+        try {
+            PutObjectRequest request = new PutObjectRequest(
+                    cosProperties.getBucketName(),
+                    key,
+                    file.getInputStream(),
+                    metadata
+            );
+            cosClient.putObject(request);
+        } catch (Exception e) {
+            // 这里可以日志记录或抛出业务异常
+            throw new IOException("上传到COS失败", e);
+        }
 
         // 生成访问 URL（你可以改成 CDN 域名或绑定域名）
         return String.format("https://%s.cos.%s.myqcloud.com/%s",

@@ -33,17 +33,13 @@ voiceMind:
     secret-key: 3iVGzOxZ0zZfC3CXDzyrMpmd4LzU7SnW05KzrmsXUVU=
     expiration-millis: 3600000
 
-model:
-  path: F:/VoiceMindServer/src/main/resources/pth
-  inputSize: 520
-  name: binary_classifier
-upload:
-  folder: src/main/resources/data
-
 tencent:
   cos:
-    secret-id: your-secret-id
-    secret-key: your-secret-key
-    bucket-name: your-bucket-name
-    region: ap-beijing
+    secret-id: AKIDfCXfbJo5RfgU4RcaQ76xa0DDMJ3atzrV
+    secret-key: WsFRQCnGWZSC3mIcBZkiYEgv10nU2d5O
+    bucket-name: mind-service-1372824172
+    region: ap-chengdu
     prefix: audio/  # 上传的文件统一前缀（可选）
+
+#SecretId:AKIDfCXfbJo5RfgU4RcaQ76xa0DDMJ3atzrV
+#SecretKey:WsFRQCnGWZSC3mIcBZkiYEgv10nU2d5O

@@ -13,7 +13,6 @@ public class FastApiService {
     @Autowired
     private WebClient webClient;
 
-    @Bean
     public String transcribe(String url, String userId, String questionId) {
         return webClient.post()
                 .uri("/transcribe")
@@ -23,7 +22,6 @@ public class FastApiService {
                 .block();
     }
 
-    @Bean
     public String predict(Map<String, Object> features) {
         return webClient.post()
                 .uri("/predict")

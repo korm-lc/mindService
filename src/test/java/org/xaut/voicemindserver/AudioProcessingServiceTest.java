@@ -33,7 +33,7 @@ public class AudioProcessingServiceTest {
                 new FileInputStream(testAudioPath)
         );
 
-        String savedPath = audioService.handleUpload(mockFile, userId, questionId);
+        String savedPath = audioService.handleUpload(mockFile, userId, questionId).toString();
         System.out.println("文件保存路径：" + savedPath);
 
         // 验证音频文件是否存在
