@@ -1,6 +1,5 @@
 package org.xaut.voicemindserver.Service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.xaut.voicemindserver.Mapper.AudioMapper;
@@ -16,20 +15,20 @@ import java.util.Map;
 @Service
 public class AudioService {
 
-    private AudioMapper audioMapper;
-    private FastApiService fastApiService;
-    private ObjectStorageService objectStorageService;
+    private final AudioMapper audioMapper;
+    private final FastApiService fastApiService;
+    private final CosService cosService;
 
-    public AudioService(AudioMapper audioMapper, ObjectStorageService objectStorageService,
+    public AudioService(AudioMapper audioMapper, CosService cosService,
                         FastApiService fastApiService){
         this.audioMapper = audioMapper;
         this.fastApiService = fastApiService;
-        this.objectStorageService = objectStorageService;
+        this.cosService = cosService;
     }
 
     public Map<String, Object> handleUpload(MultipartFile file, String userId, String questionId) throws IOException {
         Map<String, Object> result = new HashMap<>();
-        String fileUrl = objectStorageService.upload(file, userId, questionId);
+        String fileUrl = cosService.upload(file, userId, questionId);
         //将audio的对象存储路径也存入数据库汇总
         audioMapper.saveAudioUrl(userId, questionId, fileUrl, LocalDateTime.now());
 

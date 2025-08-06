@@ -7,7 +7,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.xaut.voicemindserver.Mapper.AudioMapper;
 import org.xaut.voicemindserver.Service.AudioService;
 import org.xaut.voicemindserver.Service.FastApiService;
-import org.xaut.voicemindserver.Service.ObjectStorageService;
+import org.xaut.voicemindserver.Service.CosService;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -22,7 +22,7 @@ class AudioServiceTest {
     private AudioService audioService;
 
     @Mock
-    private ObjectStorageService objectStorageService;
+    private CosService cosService;
 
     @Mock
     private FastApiService fastApiService;
@@ -48,7 +48,7 @@ class AudioServiceTest {
         );
 
         // Mock 返回值
-        when(objectStorageService.upload(mockFile, userId, questionId)).thenReturn(audioUrl);
+        when(cosService.upload(mockFile, userId, questionId)).thenReturn(audioUrl);
         when(fastApiService.transcribe(audioUrl, userId, questionId)).thenReturn(fastApiResult);
 
         // 调用方法

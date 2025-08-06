@@ -1,6 +1,5 @@
 package org.xaut.voicemindserver.Service;
 
-import com.qcloud.cos.COSClient;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,10 +10,10 @@ import java.io.FileInputStream;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-class ObjectStorageServiceTest {
+class CosServiceTest {
 
     @Autowired
-    private ObjectStorageService objectStorageService;
+    private CosService cosService;
 
     @Test
     void testUploadToCOS() throws Exception {
@@ -30,7 +29,7 @@ class ObjectStorageServiceTest {
         );
 
         // 调用上传方法
-        String url = objectStorageService.upload(multipartFile, "test_user", "test_question");
+        String url = cosService.upload(multipartFile, "test_user", "test_question");
 
         System.out.println("上传成功，文件 URL：" + url);
 
