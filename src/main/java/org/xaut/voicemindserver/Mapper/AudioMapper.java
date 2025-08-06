@@ -7,5 +7,5 @@ import java.time.LocalDateTime;
 @Mapper
 public interface AudioMapper {
 
-    void saveAudioUrl(String userId, String questionId, String audioUrl , LocalDateTime createdAt);
+    void saveAudioUrl(String userId, String questionId, String fileUrl , LocalDateTime uploadTime);
 }

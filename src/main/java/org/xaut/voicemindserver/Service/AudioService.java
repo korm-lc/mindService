@@ -29,13 +29,13 @@ public class AudioService {
 
     public Map<String, Object> handleUpload(MultipartFile file, String userId, String questionId) throws IOException {
         Map<String, Object> result = new HashMap<>();
-        String audioUrl = objectStorageService.upload(file, userId, questionId);
+        String fileUrl = objectStorageService.upload(file, userId, questionId);
         //将audio的对象存储路径也存入数据库汇总
-        audioMapper.saveAudioUrl(userId, questionId, audioUrl, LocalDateTime.now());
+        audioMapper.saveAudioUrl(userId, questionId, fileUrl, LocalDateTime.now());
 
-        String fastApiResult = fastApiService.transcribe(audioUrl, userId, questionId);
+        String fastApiResult = fastApiService.transcribe(fileUrl, userId, questionId);
 
-        result.put("audio_url", audioUrl);
+        result.put("fileUrl", fileUrl);
         result.put("fastapi_result", fastApiResult);
         return result;
     }

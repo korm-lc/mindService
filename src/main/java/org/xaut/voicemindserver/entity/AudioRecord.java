@@ -13,7 +13,7 @@ public class AudioRecord {
 
     private String questionId;
 
-    private String audioUrl;
+    private String fileUrl;
 
-    private LocalDateTime createdAt;
+    private LocalDateTime uploadTime;
 }

@@ -6,7 +6,7 @@
 <mapper namespace="org.xaut.voicemindserver.Mapper.AudioMapper">
 
     <insert id="saveAudioUrl">
-        insert into audio (user_id, question_id, audio_url, created_at)
+        insert into audio (user_id, question_id, file_path, upload_time)
         VALUES (#{userId},#{questionId},#{audioUrl},#{createdAt})
     </insert>
 </mapper>

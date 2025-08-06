@@ -1,7 +1,5 @@
 package org.xaut.voicemindserver.Service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -10,8 +8,10 @@ import java.util.Map;
 @Service
 public class FastApiService {
 
-    @Autowired
-    private WebClient webClient;
+    WebClient webClient;
+    public FastApiService(WebClient webClient){
+        this.webClient = webClient;
+    }
 
     public String transcribe(String url, String userId, String questionId) {
         return webClient.post()
