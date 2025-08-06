@@ -12,6 +12,7 @@ import com.tencentcloudapi.sts.v20180813.StsClient;
 import com.tencentcloudapi.sts.v20180813.models.AssumeRoleRequest;
 import com.tencentcloudapi.sts.v20180813.models.AssumeRoleResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.xaut.voicemindserver.configure.CosProperties;
@@ -22,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CosService {
@@ -89,7 +91,9 @@ public class CosService {
         result.put("bucket", cosProperties.getBucketName());
         result.put("region", cosProperties.getRegion());
         result.put("prefix", cosProperties.getPrefix());
+        log.info("临时STS凭证获取成功，过期时间：{}", resp.getExpiredTime());
         return result;
+
     }
 
     private AssumeRoleRequest createAssumeRoleRequest() {
@@ -109,20 +113,17 @@ public class CosService {
                 "  \"version\": \"2.0\",\n" +
                 "  \"statement\": [\n" +
                 "    {\n" +
-                "      \"action\": [\n" +
-                "        \"name/cos:PutObject\",\n" +
-                "        \"name/cos:PostObject\"\n" +
-                "      ],\n" +
+                "      \"action\": [\"name/cos:PutObject\", \"name/cos:PostObject\"],\n" +
                 "      \"effect\": \"allow\",\n" +
                 "      \"resource\": [\n" +
-                "        \"qcs::cos:" + region + ":uid/" + uid + ":prefix//" + uid + "/" + bucket + "/" + prefix + "*\"\n" +
+                "        \"qcs::cos:" + region + ":uid/" + uid + ":" + bucket + "/" + prefix + "*\"\n" +
                 "      ]\n" +
                 "    }\n" +
                 "  ]\n" +
                 "}";
 
         req.setPolicy(policy);
-        req.setRoleArn("qcs::cam::uin/100041499335:roleName/userUpload"); // 替换成实际角色ARN
+        req.setRoleArn("qcs::cam::uin/100041499335:roleName/userUpload"); // 角色ARN
         req.setRoleSessionName("upload-session");
         return req;
     }

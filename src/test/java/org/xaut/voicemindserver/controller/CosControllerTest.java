@@ -1,5 +1,6 @@
 package org.xaut.voicemindserver.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -8,6 +9,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Slf4j
 @SpringBootTest
 public class CosControllerTest {
 
@@ -27,7 +29,7 @@ public class CosControllerTest {
         assertTrue(result.containsKey("region"));
         assertTrue(result.containsKey("prefix"));
 
-        System.out.println("STS临时密钥返回：");
+        log.debug("STS临时密钥返回：");
         result.forEach((k, v) -> System.out.println(k + " : " + v));
     }
 }
