@@ -35,11 +35,11 @@ voiceMind:
 
 tencent:
   cos:
-    secret-id: AKIDfCXfbJo5RfgU4RcaQ76xa0DDMJ3atzrV
-    secret-key: WsFRQCnGWZSC3mIcBZkiYEgv10nU2d5O
-    bucket-name: mind-service-1372824172
-    region: ap-chengdu
-    prefix: audio/  # 上传的文件统一前缀（可选）
+    secret-id: ${tencent.cos.secret-id}
+    secret-key: ${tencent.cos.secret-key}
+    bucket-name: ${tencent.cos.bucket-name}
+    region: ${tencent.cos.region}
+    prefix: ${tencent.cos.prefix}  # 上传的文件统一前缀（可选）
 
 #SecretId:AKIDfCXfbJo5RfgU4RcaQ76xa0DDMJ3atzrV
 #SecretKey:WsFRQCnGWZSC3mIcBZkiYEgv10nU2d5O
