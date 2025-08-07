@@ -40,6 +40,3 @@ tencent:
     bucket-name: ${tencent.cos.bucket-name}
     region: ${tencent.cos.region}
     prefix: ${tencent.cos.prefix}  # 上传的文件统一前缀（可选）
-
-#SecretId:AKIDfCXfbJo5RfgU4RcaQ76xa0DDMJ3atzrV
-#SecretKey:WsFRQCnGWZSC3mIcBZkiYEgv10nU2d5O
