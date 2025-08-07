@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.xaut.voicemindserver.Mapper.UserMapper">
+    <delete id="deleteByUsername">
+        DELETE FROM user where student_id = #{username}
+    </delete>
+
+    <select id="findByUsername" parameterType="string" resultType="org.xaut.voicemindserver.entity.User">
+        SELECT id, student_id as username, password, register_time,role
+        FROM user
+        WHERE student_id = #{username}
+    </select>
+
+    <insert id="insert" parameterType="org.xaut.voicemindserver.entity.User">
+        insert into user (student_id, password, register_time, role)
+        values (#{username},#{password},#{registerTime},#{role})
+    </insert>
+</mapper>

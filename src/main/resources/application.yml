@@ -1,0 +1,45 @@
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: dev
+  main:
+    allow-circular-references: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/mindsystem?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+
+mybatis:
+  #mapper配置文件
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.sky.entity
+  configuration:
+    #开启驼峰命名
+    map-underscore-to-camel-case: true
+
+logging:
+  level:
+    com:
+      sky:
+        mapper: debug
+        service: info
+        controller: info
+voiceMind:
+  jwt:
+    secret-key: 3iVGzOxZ0zZfC3CXDzyrMpmd4LzU7SnW05KzrmsXUVU=
+    expiration-millis: 3600000
+
+tencent:
+  cos:
+    secret-id: ${tencent.cos.secret-id}
+    secret-key: ${tencent.cos.secret-key}
+    bucket-name: ${tencent.cos.bucket-name}
+    region: ${tencent.cos.region}
+    prefix: ${tencent.cos.prefix}  # 上传的文件统一前缀（可选）
+
+#SecretId:AKIDfCXfbJo5RfgU4RcaQ76xa0DDMJ3atzrV
+#SecretKey:WsFRQCnGWZSC3mIcBZkiYEgv10nU2d5O
