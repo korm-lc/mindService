@@ -24,16 +24,18 @@ public class JwtUtil {
     }
 
     // 生成token，放用户id或用户名做subject
-    public String generateToken(String subject) {
+    public String generateToken(String userId) {
         return Jwts.builder()
-                .setSubject(subject)//把用户名或者用户ID放进token的“sub”字段里
+                .setSubject(userId)//把用户名或者用户ID放进token的“sub”字段里
                 .setIssuedAt(new Date())//设置日期
                 .setExpiration(new Date(System.currentTimeMillis() + expirationMillis))//设置过期时间
                 .signWith(key, SignatureAlgorithm.HS256)//使用签名算法签名
                 .compact();
     }
 
-    // 解析token，返回用户名
+    /**
+     * 解析token，返回用户名
+      */
     public String getSubjectFromToken(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(key)//设置解析秘钥

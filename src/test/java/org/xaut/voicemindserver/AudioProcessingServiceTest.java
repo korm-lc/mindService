@@ -1,5 +1,6 @@
 package org.xaut.voicemindserver;
 
+import com.tencentcloudapi.cii.v20210408.models.MachinePredict;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,7 +35,8 @@ public class AudioProcessingServiceTest {
                 new FileInputStream(testAudioPath)
         );
 
-        String savedPath = audioService.handleUpload(mockFile, userId, questionId).toString();
+        Map<String, Object> saveMap = audioService.upload(mockFile, userId, questionId);
+        String savedPath = saveMap.get("fileUrl").toString();
         System.out.println("文件保存路径：" + savedPath);
 
         // 验证音频文件是否存在

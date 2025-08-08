@@ -52,10 +52,10 @@ class AudioServiceTest {
         when(fastApiService.transcribe(audioUrl, userId, questionId)).thenReturn(fastApiResult);
 
         // 调用方法
-        Map<String, Object> result = audioService.handleUpload(mockFile, userId, questionId);
+        Map<String, Object> result = audioService.upload(mockFile, userId, questionId);
 
         // 验证
-        assertEquals(audioUrl, result.get("audio_url"));
+        assertEquals(audioUrl, result.get("file_url"));
         assertEquals(fastApiResult, result.get("fastapi_result"));
 
         // 验证 mapper 方法被调用

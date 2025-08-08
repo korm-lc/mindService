@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.xaut.voicemindserver.Mapper.AudioFeatureMapper">
+
+    <insert id="insert">
+        insert into audio_feature(audio_id, feature_version, feature_data, created_at, last_used_at, audio_text)
+        VALUES (#{audioId},#{featureVersion},#{featureData},#{createdAt},#{lastUsedAt},#{audioText})
+    </insert>
+    <select id="getFeatureByAudioId" resultType="org.xaut.voicemindserver.entity.AudioFeature">
+        select id, audio_id, feature_version, feature_data, created_at, last_used_at, audio_text
+        from audio_feature where audio_id = #{audioId}
+    </select>
+</mapper>

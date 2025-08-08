@@ -7,6 +7,12 @@
 
     <insert id="saveAudioUrl">
         insert into audio (user_id, question_id, file_path, upload_time)
-        VALUES (#{userId},#{questionId},#{audioUrl},#{createdAt})
+        VALUES (#{userId},#{questionId},#{fileUrl},#{uploadTime})
     </insert>
+    <select id="findAudioIdByUrl" resultType="org.xaut.voicemindserver.entity.AudioRecord">
+        select id, user_id, question_id, file_path as fileUrl, upload_time from audio where file_path = #{fileUrl};
+    </select>
+    <select id="getAudioByUserIdAndQusetionId" resultType="org.xaut.voicemindserver.entity.AudioRecord">
+        select id, user_id, question_id, file_path as fileUrl, upload_time from audio where user_id=#{userId} and question_id=#{questionId}
+    </select>
 </mapper>

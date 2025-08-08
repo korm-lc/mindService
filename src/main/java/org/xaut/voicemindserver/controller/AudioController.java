@@ -1,12 +1,13 @@
 package org.xaut.voicemindserver.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.xaut.voicemindserver.Service.AudioService;
+import org.xaut.voicemindserver.utils.JwtUtil;
 
 import java.io.IOException;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -14,21 +15,29 @@ import java.util.Map;
 public class AudioController {
 
 
-    private AudioService audioService;
-    public AudioController(AudioService audioService){
+    private final AudioService audioService;
+    private final JwtUtil jwtUtil; // 自己实现的JWT工具类
+
+    public AudioController(AudioService audioService, JwtUtil jwtUtil){
         this.audioService = audioService;
+        this.jwtUtil = jwtUtil;
     }
+
     @PostMapping("/upload_audio")
     public ResponseEntity<?> uploadAudio(
             @RequestParam("audio") MultipartFile file,
-            @RequestParam("user_id") String userId,
-            @RequestParam("question_id") String questionId) throws IOException {
+            @RequestParam("question_id") String questionId,
+            @RequestHeader("Authorization") String authHeader) throws IOException {
 
-        return ResponseEntity.ok(audioService.handleUpload(file, userId, questionId));
+        // 解析 token，获取 userId
+        String token = authHeader.replace("Bearer ", "");
+        String userId = jwtUtil.getSubjectFromToken(token);
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("无效的Token");
+        }
+
+        // 用解析出来的 userId 调业务
+        return ResponseEntity.ok(audioService.upload(file, userId, questionId));
     }
 
-    @PostMapping("/predict")
-    public ResponseEntity<String> predict(@RequestBody Map<String, Object> request) {
-        return ResponseEntity.ok(audioService.callFastApiPredict(request));
-    }
 }
