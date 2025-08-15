@@ -2,6 +2,9 @@ server:
   port: 8080
 
 spring:
+  config:
+    import:
+      - "nacos:user-center-dtp-dev.yml?server-addr=127.0.0.1:8848&group=DEFAULT_GROUP"
   profiles:
     active: dev
   main:
@@ -12,13 +15,15 @@ spring:
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
-
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
 mybatis:
-  #mapper配置文件
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.sky.entity
   configuration:
-    #开启驼峰命名
     map-underscore-to-camel-case: true
 
 logging:
@@ -28,10 +33,13 @@ logging:
         mapper: debug
         service: info
         controller: info
+
 voiceMind:
   jwt:
     secret-key: 3iVGzOxZ0zZfC3CXDzyrMpmd4LzU7SnW05KzrmsXUVU=
     expiration-millis: 3600000
+
+# ---- Nacos 指向远程配置 ----
 
 tencent:
   cos:
@@ -39,7 +47,8 @@ tencent:
     secret-key: ${tencent.cos.secret-key}
     bucket-name: ${tencent.cos.bucket-name}
     region: ${tencent.cos.region}
-    prefix: ${tencent.cos.prefix}  # 上传的文件统一前缀（可选）
+    prefix: ${tencent.cos.prefix}
+
 python:
   feature:
     url: http://127.0.0.1:8000/extract_features/
@@ -47,5 +56,3 @@ python:
     url: http://127.0.0.1:8000/predict/
   analyze:
     url: http://127.0.0.1:8000/analyze/
-#SecretId:AKIDfCXfbJo5RfgU4RcaQ76xa0DDMJ3atzrV
-#SecretKey:WsFRQCnGWZSC3mIcBZkiYEgv10nU2d5O

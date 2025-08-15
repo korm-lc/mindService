@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Service
-@RequiredArgsConstructor
 public class AudioEmotionService {
 
     private final OkHttpClient httpClient = new OkHttpClient.Builder()
