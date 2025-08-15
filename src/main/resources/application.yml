@@ -47,5 +47,3 @@ python:
     url: http://127.0.0.1:8000/predict/
   analyze:
     url: http://127.0.0.1:8000/analyze/
-#SecretId:AKIDfCXfbJo5RfgU4RcaQ76xa0DDMJ3atzrV
-#SecretKey:WsFRQCnGWZSC3mIcBZkiYEgv10nU2d5O
