@@ -40,3 +40,12 @@ tencent:
     bucket-name: ${tencent.cos.bucket-name}
     region: ${tencent.cos.region}
     prefix: ${tencent.cos.prefix}  # 上传的文件统一前缀（可选）
+python:
+  feature:
+    url: http://127.0.0.1:8000/extract_features/
+  predict:
+    url: http://127.0.0.1:8000/predict/
+  analyze:
+    url: http://127.0.0.1:8000/analyze/
+#SecretId:AKIDfCXfbJo5RfgU4RcaQ76xa0DDMJ3atzrV
+#SecretKey:WsFRQCnGWZSC3mIcBZkiYEgv10nU2d5O

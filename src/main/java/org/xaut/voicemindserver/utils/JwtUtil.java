@@ -23,6 +23,21 @@ public class JwtUtil {
         this.expirationMillis = expirationMillis;
     }
 
+    /**
+     * 从请求头 Authorization 里解析 token 并返回用户ID（subject）
+     * 返回 null 表示无效或者无token
+     */
+    public String parseUserIdFromAuthHeader(String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return null;
+        }
+        String token = authHeader.substring(7);
+        if (!validateToken(token)) {
+            return null;
+        }
+        return getSubjectFromToken(token);
+    }
+
     // 生成token，放用户id或用户名做subject
     public String generateToken(String userId) {
         return Jwts.builder()

@@ -13,6 +13,7 @@ import com.tencentcloudapi.sts.v20180813.models.AssumeRoleRequest;
 import com.tencentcloudapi.sts.v20180813.models.AssumeRoleResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.xaut.voicemindserver.configure.CosProperties;
@@ -22,13 +23,15 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CosService {
 
     private final CosProperties cosProperties;
+    private final RedisTemplate<String, Object> redisTemplate;
     private COSClient cosClient;
 
     @PostConstruct
@@ -40,6 +43,8 @@ public class CosService {
         ClientConfig clientConfig = new ClientConfig(new Region(cosProperties.getRegion()));
         cosClient = new COSClient(cred, clientConfig);
     }
+
+    private static final String REDIS_KEY_PREFIX = "cos:sts:";
 
     public String upload(MultipartFile file, String userId, String questionId) throws IOException {
         String key = String.format("%s/%s/%s/%s",
@@ -71,16 +76,38 @@ public class CosService {
                 key);
     }
 
+
+    public Map<String, Object> getTemporaryCredentialsCached(String userId) throws Exception {
+        String redisKey = REDIS_KEY_PREFIX + userId;
+        Map<String, Object> cached = (Map<String, Object>) redisTemplate.opsForValue().get(redisKey);
+        if (cached != null) {
+            log.info("从Redis缓存获取STS凭证");
+            return cached;
+        }
+        log.info("Redis缓存无凭证，重新获取");
+        Map<String, Object> sts = getTemporaryCredentials();
+
+        // 设置过期时间，腾讯STS返回的是时间戳（秒），转成过期秒数
+        Long expiredTime = (Long) sts.get("expiredTime");
+        long now = System.currentTimeMillis() / 1000;
+        long expireSeconds = expiredTime - now - 30; // 提前30秒过期
+
+        if (expireSeconds <= 0) {
+            expireSeconds = 30; // 最少缓存30秒
+        }
+
+        redisTemplate.opsForValue().set(redisKey, sts, expireSeconds, TimeUnit.SECONDS);
+        return sts;
+    }
+
+    //已有的方法，获取STS临时凭证
     public Map<String, Object> getTemporaryCredentials() throws Exception {
         Credential cred = new Credential(
                 cosProperties.getSecretId(),
                 cosProperties.getSecretKey()
         );
-
         StsClient client = new StsClient(cred, cosProperties.getRegion());
-
         AssumeRoleRequest req = createAssumeRoleRequest();
-
         AssumeRoleResponse resp = client.AssumeRole(req);
 
         Map<String, Object> result = new HashMap<>();
@@ -93,9 +120,9 @@ public class CosService {
         result.put("prefix", cosProperties.getPrefix());
         log.info("临时STS凭证获取成功，过期时间：{}", resp.getExpiredTime());
         return result;
-
     }
 
+    // createAssumeRoleRequest 保持不变
     private AssumeRoleRequest createAssumeRoleRequest() {
         AssumeRoleRequest req = new AssumeRoleRequest();
         req.setDurationSeconds(1800L);

@@ -4,6 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.xaut.voicemindserver.utils.JwtUtil;
 
 import java.util.Map;
 
@@ -15,10 +19,21 @@ public class CosControllerTest {
 
     @Autowired
     private CosController cosController;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Test
     public void testGetCosSts() throws Exception {
-        Map<String, Object> result = cosController.getCosSts();
+        String token = jwtUtil.generateToken("testUserId");
+
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addHeader("Authorization", "Bearer " + token);
+
+        ResponseEntity<?> response = cosController.getCosSts(request.getHeader("Authorization"));
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        Map<String, Object> result = (Map<String, Object>) response.getBody();
 
         assertNotNull(result);
         assertTrue(result.containsKey("tmpSecretId"));
